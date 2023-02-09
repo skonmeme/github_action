@@ -1,0 +1,26 @@
+name: Semantic Versioning
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches: 
+      - 'release/**'
+      - 'hotfix/**'
+
+jobs:
+  tag_versioning:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-22.04
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: tag version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: release.*,hotfix.*
+          default_bump: patch
+          default_prerelease_bump: false
